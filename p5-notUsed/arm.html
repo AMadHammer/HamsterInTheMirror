@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Getting Started with ml5.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- p5 -->
+    <script src="lib/p5.min.js"></script>
+    <script src="lib/p5.play.js"></script>
+
+    <!-- ml5 -->
+    <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+</head>
+
+<body>
+    <script>
+
+        var arm;
+        var shoulderLeft, shoulderRight;
+
+        var sun;
+
+        var  distanceBetweenMouseXAndSpriteCenter,  distanceBetweenMouseYAndSpriteCenter;
+
+        function setup() {
+            createCanvas(800, 600);
+
+            shoulderLeft = {};
+            shoulderLeft.x = width / 2;
+            shoulderLeft.y = height / 2;
+
+        
+            //create art
+            leftArm = createSprite(shoulderLeft.x, shoulderLeft.y , 200, 30);
+            leftArm.setCollider('rectangle', 0, 26, 75, 75);
+
+            sun = createSprite(400, 200);
+            sun.setCollider('rectangle', 0, 26, 75, 75);
+        }
+
+        function draw() {
+            background(50);
+            ArmController();
+
+            //BallController();
+            leftArm.setCollider('rectangle', 0, 26, 75, 75, -20);
+
+            //Other
+            debuggers();
+            leftArm.debug = true;
+            sun.debug = true;
+            drawSprites();
+        }
+
+        function debuggers()
+        {
+            console.log("distanceBetweenMouseXAndSpriteCenter "+Math.abs(distanceBetweenMouseXAndSpriteCenter));
+            console.log("distanceBetweenMouseYAndSpriteCenter "+ Math.abs(distanceBetweenMouseYAndSpriteCenter));
+        }
+
+        
+        function ArmController(){
+            //center
+            let posX = width/2;
+            let posY = height/2;
+
+            distanceBetweenMouseXAndSpriteCenter =  mouseX - shoulderLeft.x ;
+            distanceBetweenMouseYAndSpriteCenter =  mouseY - shoulderLeft.y ;
+
+
+            leftArm.width =  Math.max( Math.abs(distanceBetweenMouseYAndSpriteCenter) ,Math.abs(distanceBetweenMouseXAndSpriteCenter)) + 10;
+
+            //position of arm
+            leftArm.position.x = mouseX + ((shoulderLeft.x - mouseX)/2);
+            leftArm.position.y = mouseY + ((shoulderLeft.y - mouseY)/2);
+
+            //Rotation of arm
+            let a = atan2(mouseY - height / 2, mouseX - width / 2);
+            leftArm.rotation = radians_to_degrees(a);
+
+        }
+
+
+        //events
+        function mousePressed() {
+            //train1.debug = mouseIsPressed;
+            //train1.position.x = mouseX;
+            //train1.position.y = mouseY;
+        }
+
+        function radians_to_degrees(radians) {
+            var pi = Math.PI;
+            return radians * (180 / pi);
+        }
+
+        
+
+    </script>
+</body>
+
+</html>
